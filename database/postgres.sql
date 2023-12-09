@@ -1,5 +1,5 @@
 
-DROP TABLE IF EXISTS "reviews";
+DROP TABLE IF EXISTS "reviews" CASCADE;
 
 CREATE TABLE "reviews" (
   "id" SERIAL PRIMARY KEY,
@@ -16,7 +16,7 @@ CREATE TABLE "reviews" (
   "helpfulness" INT DEFAULT 0
 );
 
-DROP TABLE IF EXISTS "characteristics";
+DROP TABLE IF EXISTS "characteristics" CASCADE;
 
 CREATE TABLE "characteristics" (
   "id" SERIAL PRIMARY KEY,
@@ -24,7 +24,7 @@ CREATE TABLE "characteristics" (
   "name" TEXT
 );
 
-DROP TABLE IF EXISTS "characteristics_reviews";
+DROP TABLE IF EXISTS "characteristics_reviews" CASCADE;
 
 CREATE TABLE "characteristics_reviews" (
   "id" SERIAL PRIMARY KEY,
@@ -37,7 +37,7 @@ CREATE TABLE "characteristics_reviews" (
   "value" SMALLINT CHECK (value > 0 AND value < 6)
 );
 
-DROP TABLE IF EXISTS "reviews_photos";
+DROP TABLE IF EXISTS "reviews_photos" CASCADE;
 
 CREATE TABLE "reviews_photos" (
   "id" SERIAL PRIMARY KEY,
@@ -67,7 +67,9 @@ COPY reviews_photos FROM
 DELIMITER ','
 CSV HEADER;
 
--- DROP VIEW IF EXISTS metadata;
--- CREATE VIEW metadata AS
--- SELECT rating, recommend FROM
--- reviews;
+DROP VIEW IF EXISTS metadata;
+CREATE VIEW metadata AS
+SELECT AVG(rating) as average_rating, AVG(value) as average_value
+FROM reviews, characteristics, characteristics_reviews
+WHERE characteristics.id = characteristics_reviews.id
+GROUP BY name;
