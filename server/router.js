@@ -20,6 +20,36 @@ router.get('/reviews/:id', (req, res) => {
   })
 } )
 
+router.get('/reviews/meta/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  let ratings = null;
+  await pool.query(`
+  SELECT rating, COUNT(*) as count
+  FROM reviews
+  WHERE product_id = $1
+  GROUP BY rating;
+`,[id])
+  .then((response)=> {
+    ratings = response.rows;
+  })
+  console.log(ratings);
+  let recommended = null;
+  await pool.query(`
+  SELECT recommend, COUNT(*) as count
+  FROM reviews
+  WHERE product_id = $1
+  GROUP BY recommend;
+`,[id])
+  .then((response)=> {
+    recommended = response.rows;
+  })
+  console.log(recommended);
+
+res.end();
+})
+
+
+
 
 module.exports = router;
 
