@@ -40,17 +40,17 @@ router.get('/reviews/', async (req, res) => {
       date,
       reviewer_name,
       helpfulness,
-      (
-        SELECT COALESCE(json_agg(json_build_object('id', reviews_photos.id, 'url', reviews_photos.url)), '[]')
+      ARRAY(
+        SELECT jsonb_build_object('id', reviews_photos.id, 'url', reviews_photos.url)
         FROM reviews_photos
         WHERE reviews.id = reviews_photos.review_id
-      ) AS photos
+    ) AS photos
       FROM reviews
       WHERE product_id = $1 AND reported = false
-      ORDER BY $2
-      LIMIT $3
-      OFFSET $4;`,
-      [id, sortQuery, count, offset],
+      ORDER BY ${sortQuery}
+      LIMIT $2
+      OFFSET $3;`,
+      [id, count, offset],
     )
       .then((response) => {
         results = response.rows;
@@ -61,7 +61,6 @@ router.get('/reviews/', async (req, res) => {
       count,
       results,
     };
-    console.log(data);
     res.json(data);
   } catch (error) {
     if (error) {
@@ -71,9 +70,9 @@ router.get('/reviews/', async (req, res) => {
   }
 });
 
-router.get('/reviews/meta/:id', async (req, res) => {
+router.get('/reviews/meta/', async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.query.product_id;
     let ratings = null;
     await pool.query(`
     SELECT rating, COUNT(*) as count

@@ -6,7 +6,6 @@
 -- SELECT setval(pg_get_serial_sequence('characteristics_reviews', 'id'), (SELECT MAX(id) FROM characteristics_reviews) + 1);
 
 -- SELECT setval(pg_get_serial_sequence('reviews_photos', 'id'), (SELECT MAX(id) FROM reviews_photos) + 1);
--- SELECT review from
 -- DROP MATERIALIZED VIEW IF EXISTS metachar;
 
 -- CREATE MATERIALIZED VIEW metachar AS
@@ -16,11 +15,22 @@
 -- GROUP BY t1.product_id, t1.name, t2.characteristic_id;
 -- DROP INDEX IF EXISTS metachar_index;
 -- CREATE INDEX metachar_index ON metachar(product_id);
+-- -- CLUSTER metachar USING metachar_index;
 
--- CLUSTER metachar USING metachar_index;
+-- DROP INDEX IF EXISTS product_index;
+-- CREATE INDEX product_index ON reviews(product_id, id, reported);
+-- -- CLUSTER reviews USING product_index;
+-- DROP INDEX IF EXISTS photo_index;
+-- CREATE INDEX photo_index ON reviews_photos(review_id);
 
-DROP INDEX IF EXISTS product_index;
-CREATE INDEX product_index ON reviews(product_id, id, reported);
--- CLUSTER reviews USING product_index;
-DROP INDEX IF EXISTS photo_index;
-CREATE INDEX photo_index ON reviews_photos(review_id);
+-- ALTER TABLE reviews
+-- ADD COLUMN new_date TIMESTAMP NOT NULL DEFAULT NOW();
+
+-- UPDATE reviews
+-- SET new_date = TO_TIMESTAMP(date/1000);
+
+ALTER TABLE reviews
+DROP COLUMN date;
+
+ALTER TABLE reviews
+RENAME COLUMN new_date TO date;

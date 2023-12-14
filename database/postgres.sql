@@ -66,14 +66,3 @@ COPY reviews_photos FROM
 '/private/tmp/reviews_photos.csv'
 DELIMITER ','
 CSV HEADER;
-
-CREATE INDEX product_index ON reviews(product_id, id);
-
-CLUSTER reviews USING product_index;
-
--- DROP VIEW IF EXISTS metadata;
--- CREATE VIEW metadata AS
--- SELECT AVG(rating) as average_rating, AVG(value) as average_value
--- FROM reviews, characteristics, characteristics_reviews
--- WHERE characteristics.id = characteristics_reviews.id
--- GROUP BY name;
