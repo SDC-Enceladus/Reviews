@@ -47,7 +47,7 @@ CREATE TABLE "reviews_photos" (
   "url" TEXT
 );
 
-\COPY reviews FROM 'data/reviews.csv' DELIMITER ',' CSV HEADER;
-\COPY reviews_photos FROM 'data/reviews_photos.csv' DELIMITER ',' CSV HEADER;
-\COPY characteristics_reviews FROM 'data/characteristic_reviews.csv' DELIMITER ',' CSV HEADER;
-\COPY characteristics FROM 'data/characteristics.csv' DELIMITER ',' CSV HEADER;
+\COPY reviews FROM '/private/tmp/reviews.csv' DELIMITER ',' CSV HEADER;
+\COPY reviews_photos FROM '/private/tmp/reviews_photos.csv' DELIMITER ',' CSV HEADER;
+\COPY characteristics_reviews FROM '/private/tmp/characteristics_reviews.csv' DELIMITER ',' CSV HEADER;
+\COPY characteristics FROM '/private/tmp/characteristics.csv' DELIMITER ',' CSV HEADER;
