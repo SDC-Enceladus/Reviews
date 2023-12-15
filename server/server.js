@@ -14,6 +14,6 @@ app.get('/users', (request, response) => {
   console.log('hello');
   response.json('hello');
 });
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log('Running on: ', port);
 });
