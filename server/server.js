@@ -8,12 +8,8 @@ const port = process.env.PORT;
 const app = express();
 app.use(express.json());
 // app.use(morgan('combined'));
-// app.use(express.static(path.join))
 app.use('/', router);
-app.get('/users', (request, response) => {
-  console.log('hello');
-  response.json('hello');
-});
+app.use(express.static(path.join(__dirname, './loader')));
 app.listen(port, () => {
   console.log('Running on: ', port);
 });
