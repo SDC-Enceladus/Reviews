@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 // app.use(morgan('combined'));
 app.use('/', router);
-app.use(express.static(path.join(__dirname, './loader')));
+app.use(express.static(path.join(__dirname, '.././loader')));
 app.listen(port, () => {
   console.log('Running on: ', port);
 });
